@@ -10,10 +10,10 @@ var runAnimationflip = [walk2flip,walk3flip,walk2flip,walk1flip];
 var runAnimation = [walk2,walk3,walk2,walk1];
 var activeAnimation = runAnimationflip;
 var currentAnimation = 0;
-var animationBuffer = 20;
+var animationBuffer = 1;
 var frameCount = 0;
 
-var jumpHeight = 2;
+var jumpHeight = 5;
 var jumpVelocity = 0;
 
 var xpos = 0;
@@ -21,14 +21,14 @@ var ypos = 0;
 
 function NextState()
 {
-
+VerticalMovement();
   var newsprite = NextSprite()
   return [newsprite,xpos,ypos]
 }
 
  function NextSprite() {
 
-   VerticalMovement();
+
    frameCount++;
    if(frameCount > animationBuffer)
    {
@@ -52,12 +52,12 @@ function NextState()
  function VerticalMovement()
  {
    if(jumpVelocity > 1)
-   {ypos -= 2; }
+   {ypos -= 5; }
    else if(jumpVelocity > 0)
-   {ypos -= 1; }
+   {ypos -= 3; }
    else
    {
-     if(ypos < 0){ypos += 2;}
+     if(ypos < 0){ypos += 4;}
 
    }
 

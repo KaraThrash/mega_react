@@ -12,7 +12,7 @@ import stand1flip from './sprites/scoutspritesheet/stand1flip.png';
 import walk1flip from './sprites/scoutspritesheet/walk1flip.png';
 import walk2flip from './sprites/scoutspritesheet/walk2flip.png';
 import walk3flip from './sprites/scoutspritesheet/walk3flip.png';
- var currentmap0 = [bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluefloor,bluesquare,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,];
+ var currentmap0 = [bluefloor,bluefloor,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluesquare];
 var currentmap1 = [bluefloor,bluesquare,bluesquare];
 var currentmap2 = [bluefloor,bluefloor,bluefloor];
 var currentmap3 = [bluesquare,bluefloor,bluesquare];
@@ -34,82 +34,48 @@ export default class Map
 
       MoveMap = function()
     {
-      var newlastpiece = this.currentmap0[0];
-      var newmap = this.currentmap0.slice(1,currentmap0.length);
-      newmap.push(currentmap0[0 ]);
-      this.currentmap0 = newmap;
-      // for (var i = 1; i < currentmap0.length - 1; i++)
-      // {
-      //   // currentmap0[i] = currentmap0[i + 1];
-      //   newmap.push(currentmap0[i ])
-      //   newmap[i] = currentmap0[i - 1]
-      // }
-      //   newmap.push(newlastpiece)
-    // currentmap0[currentmap0.length - 1] = newlastpiece;
-    return newmap
+          if(this.currentmap0.length == 0){this.currentmap0 = currentmap0;}
+         var newmap = [];
+
+        for (var i = 1; i < this.currentmap0.length ; i++)
+        {
+          // currentmap0[i] = currentmap0[i + 1];
+          newmap.push(this.currentmap0[i ])
+          // newmap[i] = currentmap0[i - 1]
+        }
+        newmap.push(this.currentmap0[0 ])
+          this.currentmap0 = newmap;
     }
 
 
      GetMap = function(oldmap)
     {
-      if(oldmap.length == 0){oldmap = currentmap0;}
-     var newmap = [];
+    //   if(oldmap.length == 0){oldmap = currentmap0;}
+    //  var newmap = [];
+    //
+    // for (var i = 1; i < oldmap.length ; i++)
+    // {
+    //   // currentmap0[i] = currentmap0[i + 1];
+    //   newmap.push(oldmap[i ])
+    //   // newmap[i] = currentmap0[i - 1]
+    // }
+    // newmap.push(oldmap[0 ])
+    //   // this.currentmap0 = newmap;
+      return   this.currentmap0;
 
-    for (var i = 1; i < oldmap.length ; i++)
-    {
-      // currentmap0[i] = currentmap0[i + 1];
-      newmap.push(oldmap[i ])
-      // newmap[i] = currentmap0[i - 1]
+
     }
-    newmap.push(oldmap[0 ])
-      // this.currentmap0 = newmap;
-      return   newmap;
+
+    CheckIfSpaceOpen = function()
+   {
+     if(this.currentmap0[1] == bluesquare){return false;}
+     else{return true;}
 
 
-    }
+   }
+
 }
-// class Map extends React.Component {
-//
-//
-//
-//   render() {
-//     var rows = []
-//
-//     let divStyle = {
-//       position: 'absolute',
-//       left: "1%",
-//       top:  "1%"
-//
-//     };
-//
-//     for (var j = 0; j < 5; j++)
-//     {
-//       rows2 = []
-//       for (var i = 0; i < 5; i++)
-//       {
-//         divStyle = {
-//           position: 'absolute',
-//           left:((i * 2)  ).toString() + "%",
-//           top:((j * 10) + 10  ).toString() + "%"
-//
-//
-//         };
-//
-//         rows.push(<img className="board-row" style={divStyle} src={currentmap[0]}>  </img>)
-//         squarevalue++
-//       }
-//
-//     }
-//     return (
-//       <div>
-//     {  rows}
-//       </div>
-//     );
-//   }
-//
-//
-//
-// }
+
 
 // export default {
 // Map

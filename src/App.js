@@ -52,18 +52,22 @@ handleKeyPress = (event) => {
     var newdir = this.state.direction;
     if (this.state.xpos > window.innerWidth * 0.9){newdir = -1;player.ChangeDirection(newdir);}
     if (this.state.xpos < window.innerWidth * 0.1){newdir = 1;player.ChangeDirection(newdir);}
-
      playerState =  player.NextState();
+     if(playerState[2] < -10 || map.CheckIfSpaceOpen() == true )
+     {
+       map.MoveMap();
+
+     }
         this.setState(
           {
             direction: newdir,
-            xpos: this.state.xpos + newdir * timeBuffer,
+            xpos: this.state.xpos ,
             ypos: playerState[2] + 100,
             sprite: playerState[0]
            }
         );
         // call getData() again in 5 seconds
-        this.intervalID = setTimeout(this.movePlayer.bind(this), 10);
+        this.intervalID = setTimeout(this.movePlayer.bind(this), 100);
   }
 
   render() {
@@ -75,7 +79,7 @@ handleKeyPress = (event) => {
       color: 'blue',
       position: 'absolute',
       left: (this.state.xpos).toString() + "px",
-      top:  (this.state.ypos + 100).toString() + "px",
+      top:  (this.state.ypos + 135).toString() + "px",
       width:"3%",
       height:"5%"
     };
@@ -129,14 +133,14 @@ class MapRender extends React.Component {
 
     };
 
-    for (var j = 0; j < 5; j++)
+    for (var j = 0; j < 6; j+=2)
     {
       for (var i = 0; i < this.state.currentmap.length; i++)
       {
             divStyle = {
               position: 'absolute',
               left:((i * 3.5)  ).toString() + "%",
-              top:((j * 3.5) + 10  ).toString() + "%",
+              top:((j * 4.5) + 10  ).toString() + "%",
               width:"3%",
               height:"3%"
 
