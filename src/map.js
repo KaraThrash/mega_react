@@ -24,27 +24,46 @@ var level1walls = [bluefloor,blacksquare,bluefloor,blacksquare,blacksquare,bluef
 var level0floors = [bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor]
 var level1floors = [bluefloor,blacksquare,bluefloor,blacksquare,blacksquare,bluefloor,bluefloor,bluesquare,bluefloor]
 
+var maparray = [[0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,1,1,1],
+                [0,1,0,0,0,0,0,0,0,0],
+                [0,0,0,1,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,1,1,1,0],
+                [0,1,0,0,0,0,0,0,0,0],
+                [0,0,0,0,1,1,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [1,1,2,1,1,1,1,2,1,1]]
+
 export default class Map
 {
 
 
   constructor() {
-      this.currentmap0 = currentmap0;
+      this.currentmap0 = maparray;
+      this.squarewidth = 10;
+      this.squareheight = 10;
     }
 
       MoveMap = function()
     {
-          if(this.currentmap0.length == 0){this.currentmap0 = currentmap0;}
-         var newmap = [];
-
-        for (var i = 1; i < this.currentmap0.length ; i++)
-        {
-          // currentmap0[i] = currentmap0[i + 1];
-          newmap.push(this.currentmap0[i ])
-          // newmap[i] = currentmap0[i - 1]
-        }
-        newmap.push(this.currentmap0[0 ])
-          this.currentmap0 = newmap;
+ //          if(this.currentmap0.length == 0){this.currentmap0 = maparray;}
+ //         var newmap = [];
+ // var newmap2 = [];
+ //        for (var i = 0; i < this.currentmap0.length ; i++)
+ //        {
+ //          newmap2 = [];
+ //          for (var j = 1; j < this.currentmap0[i].length ; j++)
+ //          {
+ //            // currentmap0[i] = currentmap0[i + 1];
+ //            newmap2.push(this.currentmap0[i][j])
+ //            // newmap[i] = currentmap0[i - 1]
+ //          }
+ //          newmap2.push(this.currentmap0[i][0])
+ //          newmap.push(newmap2)
+ //        }
+ //        // newmap.push(this.currentmap0[0 ])
+ //          this.currentmap0 = newmap;
     }
 
 
@@ -66,13 +85,32 @@ export default class Map
 
     }
 
-    CheckIfSpaceOpen = function()
+   //  CheckIfSpaceOpen = function()
+   // {
+   //   if(this.currentmap0[1] == bluesquare){return false;}
+   //   else{return true;}
+   // }
+
+   CheckIfSpaceOpen = function(row,col)
+  {
+    if(row >= 10 || col >= 10 ||
+      row < 0 || col < 0)
+    {return false;}
+    if(this.currentmap0[9 - row][col]  > 1){return false;}
+    else{return true;}
+  }
+
+   SpriteSwitch = function(mapsquarevalue)
    {
-     if(this.currentmap0[1] == bluesquare){return false;}
-     else{return true;}
-
-
+     if(mapsquarevalue === 0)
+     {return blacksquare;}
+     if(mapsquarevalue === 1)
+     {return bluefloor;}
+     if(mapsquarevalue === 2)
+     {return bluesquare;}
+     return blacksquare;
    }
+
 
 }
 

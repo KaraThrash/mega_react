@@ -36,24 +36,14 @@ class Player extends React.Component {
     clearTimeout(this.intervalID);
   }
 
-  jump = (event) => {
-    player.Jump();
-    console.log("jump");
-    console.log(event);
-}
 
-handleKeyPress = (event) => {
-
-    console.log('enter press here! ')
-
-}
   movePlayer = () => {
 
     var newdir = this.state.direction;
-    if (this.state.xpos > window.innerWidth * 0.9){newdir = -1;player.ChangeDirection(newdir);}
-    if (this.state.xpos < window.innerWidth * 0.1){newdir = 1;player.ChangeDirection(newdir);}
-     playerState =  player.NextState();
-     if(playerState[2] < -10 || map.CheckIfSpaceOpen() == true )
+    // if (this.state.xpos > window.innerWidth * 0.9){newdir = -1;player.ChangeDirection(newdir);}
+    // if (this.state.xpos < window.innerWidth * 0.1){newdir = 1;player.ChangeDirection(newdir);}
+     playerState =  player.NextState(map);
+     if(playerState[2] > 10 || map.CheckIfSpaceOpen(1,1) == true )
      {
        map.MoveMap();
 
@@ -61,13 +51,13 @@ handleKeyPress = (event) => {
         this.setState(
           {
             direction: newdir,
-            xpos: this.state.xpos ,
+            xpos: playerState[1] ,
             ypos: playerState[2] + 100,
             sprite: playerState[0]
            }
         );
         // call getData() again in 5 seconds
-        this.intervalID = setTimeout(this.movePlayer.bind(this), 100);
+        this.intervalID = setTimeout(this.movePlayer.bind(this), 70);
   }
 
   render() {
@@ -79,7 +69,7 @@ handleKeyPress = (event) => {
       color: 'blue',
       position: 'absolute',
       left: (this.state.xpos).toString() + "px",
-      top:  (this.state.ypos + 135).toString() + "px",
+      top:  (485 - this.state.ypos ).toString() + "px",
       width:"3%",
       height:"5%"
     };
@@ -133,20 +123,20 @@ class MapRender extends React.Component {
 
     };
 
-    for (var j = 0; j < 6; j+=2)
+    for (var j = 0; j < this.state.currentmap.length; j+=1)
     {
-      for (var i = 0; i < this.state.currentmap.length; i++)
+      for (var i = 0; i < this.state.currentmap[j].length; i++)
       {
             divStyle = {
               position: 'absolute',
-              left:((i * 3.5)  ).toString() + "%",
-              top:((j * 4.5) + 10  ).toString() + "%",
-              width:"3%",
-              height:"3%"
+              left:((i * 43.1)  ).toString() + "px",
+              top:((j * 43.1) + 7.2  ).toString() + "px",
+              width:"40px",
+              height:"40px"
 
             };
 
-        rows.push(<img  style={divStyle} src={this.state.currentmap[i]} /> )
+        rows.push(<img  style={divStyle} src={map.SpriteSwitch(this.state.currentmap[j][i])} /> )
       }
 
     }
@@ -178,16 +168,28 @@ class Controls extends React.Component {
     console.log(event);
 }
 
+moveleft = (event) => {
+  player.SetMoveDirection(-1);
+
+}
+
+moveright = (event) => {
+  player.SetMoveDirection(1);
+
+}
+
   handleKeyPress = (event) => {
 
-      console.log('enter press here! ')
+      console.log('enter press here! ', event.which)
+      if(event.which == 32){this.jump();}
+      if(event.which == 97){this.moveleft();}
+      if(event.which == 100){this.moveright();}
 
   }
 
   render() {
 
 
-    var orange = "position:absolute"
     xpos = xpos + 10;
     const divStyle = {
       position: 'absolute',
@@ -200,12 +202,34 @@ class Controls extends React.Component {
       "border-color":"black"
 
     };
+    const leftbutton = {
+      position: 'absolute',
+      left: "20%" ,
+      top:  "50%",
+      width:'5%',
+      height:'5%',
+      "text-style":"bold",
+      "font-size": "50%",
+      "font-weight": "bold"
 
+    };
+    const rightbutton = {
+      position: 'absolute',
+      left: "25%" ,
+      top:  "50%",
+      width:'5%',
+      height:'5%',
+      "text-style":"bold",
+      "font-size": "50%",
+      "font-weight": "bold"
+
+    };
     return (
 
       <div >
-        <input style={divStyle} type="text" id="one" maxlength="1" onKeyPress={this.jump} />
-
+        <input style={divStyle} type="text" id="one" maxlength="1" onKeyPress={this.handleKeyPress} />
+        <button style={leftbutton}  onKeyPress={this.moveright} > LEFT</button>
+        <button style={rightbutton}    onKeyPress={this.moveright} > RIGHT</button>
       </div>
     );
   }
