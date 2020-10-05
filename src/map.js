@@ -3,6 +3,7 @@ import blacksquare from './sprites/scoutspritesheet/blackcube.png';
 import bluewall from './sprites/scoutspritesheet/bluewall0.png';
 import bluewall1 from './sprites/scoutspritesheet/bluewall1.png';
 import bluefloor from './sprites/scoutspritesheet/bluefloor.png';
+import blueceiling from './sprites/scoutspritesheet/blueceiling.png';
 import bluewallfloor from './sprites/scoutspritesheet/bluewallfloor.png';
 import bluewallfloor1 from './sprites/scoutspritesheet/bluewallfloor1.png';
 
@@ -25,15 +26,15 @@ var level0floors = [bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloo
 var level1floors = [bluefloor,blacksquare,bluefloor,blacksquare,blacksquare,bluefloor,bluefloor,bluesquare,bluefloor]
 
 var maparray = [[0,0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,1,1,1],
-                [0,1,0,0,0,0,0,0,0,0],
-                [0,0,0,1,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,2,2,2],
+                [0,2,0,0,0,0,0,0,0,0],
+                [0,0,0,2,0,0,0,0,0,0],
+                [0,3,3,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,2,2,2,0],
+                [0,2,0,0,0,0,0,0,0,0],
+                [0,0,0,0,2,2,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,1,1,1,0],
-                [0,1,0,0,0,0,0,0,0,0],
-                [0,0,0,0,1,1,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0,0],
-                [1,1,2,1,1,1,1,2,1,1]]
+                [1,1,3,1,1,1,1,3,1,1]]
 
 export default class Map
 {
@@ -96,8 +97,17 @@ export default class Map
     if(row >= 10 || col >= 10 ||
       row < 0 || col < 0)
     {return false;}
-    if(this.currentmap0[9 - row][col]  > 1){return false;}
+    if(this.currentmap0[9 - row][col]  > 2){return false;}
     else{return true;}
+  }
+
+  GetSquareValue = function(row,col)
+  {
+   if(row >= 10 || col >= 10 ||
+     row < 0 || col < 0)
+   {return 2;}
+   if(this.currentmap0[9 - row][col]  > 2){return 2;}
+   else{return this.currentmap0[9 - row][col];}
   }
 
    SpriteSwitch = function(mapsquarevalue)
@@ -107,6 +117,8 @@ export default class Map
      if(mapsquarevalue === 1)
      {return bluefloor;}
      if(mapsquarevalue === 2)
+     {return blueceiling;}
+     if(mapsquarevalue === 3)
      {return bluesquare;}
      return blacksquare;
    }

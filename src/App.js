@@ -158,7 +158,7 @@ class Controls extends React.Component {
     ypos: '1%',
     width:100,
     height:100,
-    direction : 1
+    direction : 0
   }
 
 
@@ -167,28 +167,34 @@ class Controls extends React.Component {
     console.log("jump");
     console.log(event);
 }
+//
+// moveleft = (event) => {
+//   player.SetLeftSpeed(1);
+//
+// }
+//
+// moveright = (event) => {
+//   player.SetRightSpeed(1);
+//
+// }
 
-moveleft = (event) => {
-  player.SetMoveDirection(-1);
-
-}
-
-moveright = (event) => {
-  player.SetMoveDirection(1);
-
-}
 
   handleKeyPress = (event) => {
 
       console.log('enter press here! ', event.which)
-      if(event.which == 32){this.jump();}
-      if(event.which == 97){this.moveleft();}
-      if(event.which == 100){this.moveright();}
+      if(event.which == 32){player.Jump();}
+      if(event.which == 97){player.SetLeftSpeed(1);}
+      if(event.which == 100){player.SetRightSpeed(1);}
+
+  }
+  handleKeyUp = (event) => {
+
+      if(event.which == 65){player.SetLeftSpeed(0);}
+      if(event.which == 68){player.SetRightSpeed(0);}
 
   }
 
   render() {
-
 
     xpos = xpos + 10;
     const divStyle = {
@@ -227,7 +233,7 @@ moveright = (event) => {
     return (
 
       <div >
-        <input style={divStyle} type="text" id="one" maxlength="1" onKeyPress={this.handleKeyPress} />
+        <input style={divStyle} type="text" id="one" maxlength="1" onKeyPress={this.handleKeyPress} onKeyUp={this.handleKeyUp} />
         <button style={leftbutton}  onKeyPress={this.moveright} > LEFT</button>
         <button style={rightbutton}    onKeyPress={this.moveright} > RIGHT</button>
       </div>
