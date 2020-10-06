@@ -34,7 +34,8 @@ var maparray = [[0,0,0,0,0,0,0,0,0,0],
                 [0,2,0,0,0,0,0,0,0,0],
                 [0,0,0,0,2,2,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0,0],
-                [1,1,3,1,1,1,1,3,1,1]]
+                [0,0,3,0,0,0,0,3,0,0],
+                [3,3,3,3,3,3,3,3,3,3]]
 
 export default class Map
 {
@@ -42,8 +43,8 @@ export default class Map
 
   constructor() {
       this.currentmap0 = maparray;
-      this.squarewidth = 10;
-      this.squareheight = 10;
+      this.squarewidth = 50;
+      this.squareheight = 50;
     }
 
       MoveMap = function()
@@ -94,20 +95,20 @@ export default class Map
 
    CheckIfSpaceOpen = function(row,col)
   {
-    if(row >= 10 || col >= 10 ||
+    if(row >= this.currentmap0.length || col >= this.currentmap0[0].length ||
       row < 0 || col < 0)
     {return false;}
-    if(this.currentmap0[9 - row][col]  > 2){return false;}
+    if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return false;}
     else{return true;}
   }
 
   GetSquareValue = function(row,col)
   {
-   if(row >= 10 || col >= 10 ||
+   if(row >= this.currentmap0[0].length || col >= this.currentmap0[0].length ||
      row < 0 || col < 0)
-   {return 2;}
-   if(this.currentmap0[9 - row][col]  > 2){return 2;}
-   else{return this.currentmap0[9 - row][col];}
+   {return 3;}
+   if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return 3;}
+   else{return this.currentmap0[this.currentmap0.length - row][col];}
   }
 
    SpriteSwitch = function(mapsquarevalue)
@@ -123,6 +124,11 @@ export default class Map
      return blacksquare;
    }
 
+   GetSquareHeight = function(oldmap)
+  {return this.squareheight;}
+
+  GetSquareWidth = function(oldmap)
+ {return this.squarewidth;}
 
 }
 

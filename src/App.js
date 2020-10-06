@@ -51,8 +51,8 @@ class Player extends React.Component {
         this.setState(
           {
             direction: newdir,
-            xpos: playerState[1] ,
-            ypos: playerState[2] + 100,
+            xpos: playerState[1] - 20,
+            ypos: playerState[2] - 70,
             sprite: playerState[0]
            }
         );
@@ -129,10 +129,10 @@ class MapRender extends React.Component {
       {
             divStyle = {
               position: 'absolute',
-              left:((i * 43.1)  ).toString() + "px",
-              top:((j * 43.1) + 7.2  ).toString() + "px",
-              width:"40px",
-              height:"40px"
+              left:((i * 50)  ).toString() + "px",
+              top:((j * 50)  ).toString() + "px",
+              width:"50px",
+              height:"50px"
 
             };
 
@@ -211,7 +211,7 @@ class Controls extends React.Component {
     const leftbutton = {
       position: 'absolute',
       left: "20%" ,
-      top:  "50%",
+      top:  "60%",
       width:'5%',
       height:'5%',
       "text-style":"bold",
@@ -222,7 +222,7 @@ class Controls extends React.Component {
     const rightbutton = {
       position: 'absolute',
       left: "25%" ,
-      top:  "50%",
+      top:  "60%",
       width:'5%',
       height:'5%',
       "text-style":"bold",
