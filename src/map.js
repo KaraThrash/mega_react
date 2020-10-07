@@ -25,17 +25,17 @@ var level1walls = [bluefloor,blacksquare,bluefloor,blacksquare,blacksquare,bluef
 var level0floors = [bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor]
 var level1floors = [bluefloor,blacksquare,bluefloor,blacksquare,blacksquare,bluefloor,bluefloor,bluesquare,bluefloor]
 
-var maparray = [[0,0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,2,2,2],
-                [0,2,0,0,0,0,0,0,0,0],
-                [0,0,0,2,0,0,0,0,0,0],
-                [0,3,3,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,2,2,2,0],
-                [0,2,0,0,0,0,0,0,0,0],
-                [0,0,0,0,2,2,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0,0],
-                [0,0,3,0,0,0,0,3,0,0],
-                [3,3,3,3,3,3,3,3,3,3]]
+var maparray = [[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,0,0,0,0,0,2,2,2,0,0,2,0,0,0,0,2,0,0],
+                [0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,3,3,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,0,0,0,0,2,2,2,0,0,0,2,0,0,0,0,2,0,0],
+                [0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,0,0,2,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,0,0,2,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,3,0,0,0,0,3,0,0,0,0,2,0,0,0,0,2,0,0],
+                [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]]
 
 export default class Map
 {
@@ -95,7 +95,7 @@ export default class Map
 
    CheckIfSpaceOpen = function(row,col)
   {
-    if(row >= this.currentmap0.length || col >= this.currentmap0[0].length ||
+    if(row > this.currentmap0.length || col >= this.currentmap0[this.currentmap0.length - row].length ||
       row < 0 || col < 0)
     {return false;}
     if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return false;}
@@ -104,7 +104,7 @@ export default class Map
 
   GetSquareValue = function(row,col)
   {
-   if(row >= this.currentmap0[0].length || col >= this.currentmap0[0].length ||
+   if(row > this.currentmap0.length || col >= this.currentmap0[this.currentmap0.length - row].length ||
      row < 0 || col < 0)
    {return 3;}
    if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return 3;}

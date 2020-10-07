@@ -5,6 +5,9 @@ import playerSprite from './sprites/scoutspritesheet/stand1.png';
 import player from "./player.js";
 import Map from  "./map.js";
 let map = new Map();
+
+var spritewidth = 20,spriteheight = 70;
+
 var timeBuffer = 1; //for controlling game speed
 let xpos = 0;
 let ypos = 0;
@@ -51,13 +54,13 @@ class Player extends React.Component {
         this.setState(
           {
             direction: newdir,
-            xpos: playerState[1] - 20,
-            ypos: playerState[2] - 70,
+            xpos: playerState[1] - spritewidth,
+            ypos: playerState[2] - spriteheight,
             sprite: playerState[0]
            }
         );
         // call getData() again in 5 seconds
-        this.intervalID = setTimeout(this.movePlayer.bind(this), 70);
+        this.intervalID = setTimeout(this.movePlayer.bind(this), 10);
   }
 
   render() {

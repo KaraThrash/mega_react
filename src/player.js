@@ -8,43 +8,43 @@ import walk2flip from './sprites/scoutspritesheet/walk2flip.png';
 import walk3flip from './sprites/scoutspritesheet/walk3flip.png';
 import jump1 from './sprites/scoutspritesheet/jump.png';
 import jump1flip from './sprites/scoutspritesheet/jumpflip.png';
-
+import SpriteSheet from "./SpriteSheet.js" ;
 var runAnimationflip = [walk2flip,walk3flip,walk2flip,walk1flip];
 var runAnimation = [walk2,walk3,walk2,walk1];
 var activeAnimation = runAnimationflip;
-var currentAnimation = 0;
-var animationBuffer = 1;
-var frameCount = 0;
 
-var walkspeed = 4;
-var jumpHeight = 15;
+var currentAnimation = 0, animationBuffer = 7, frameCount = 0;
+
+var leftspeed = 0, rightspeed = 0, direction = 0;
+var walkspeed = 2, jumpspeed = 4;
+var jumpHeight = 5;
 var jumpVelocity = 0;
 
-var direction = 0;
+var totalJumps = 2;
+var canjump = totalJumps;
+
 
 var xpos = 5;
 var ypos = 100;
 var squarewidth = 50;
 var squareheight = 50;
-var gravity = 0, gravitystrength = 4;
-var gravitycycle = 4;
+var gravity = 0, gravitystrength = 4, gravitycycle = 6;
 
-var leftspeed = 0;
-var rightspeed = 0;
 
-var totalJumps = 2;
-var canjump = totalJumps;
-var spriteheight = 10;
+
+
+
+var spriteheight = 20;
 var spritewidth = 10;
+
 function NextState(map)
 {
 
       VerticalMovement(map);
-      Gravity(map);
 
       ForwardMovement(map);
 
-      var newsprite = NextSprite()
+      var newsprite = SpriteSheet.NextSprite(jumpVelocity,direction);
 
 
       return [newsprite,xpos,ypos]
@@ -92,18 +92,13 @@ function NextState(map)
 
 }
 
- function ChangeDirection(direction)
- {
-      if(direction == -1){activeAnimation = runAnimation;}
-      else   if(direction == 1){activeAnimation = runAnimationflip;}
 
- }
 
  function ForwardMovement(map)
  {
-        ChangeDirection(direction);
+        SpriteSheet.ChangeDirection(direction);
         console.log("direction: ",direction);
-         if( map.CheckIfSpaceOpen(GetRow(),GetColumn(xpos + (direction * walkspeed))))
+         if( map.CheckIfSpaceOpen(GetRow(),GetColumn(xpos + (direction * spritewidth) + (direction * walkspeed))))
          {
            xpos += (walkspeed * direction);
          }else{}
@@ -119,12 +114,10 @@ function NextState(map)
           if(jumpVelocity > 0)
          {
            //check if their is a ceiling to block the verticle movement
-           if(3 <= map.GetSquareValue(GetRow(ypos + jumpVelocity),GetColumn()))
+           if(3 <= map.GetSquareValue(GetRow(ypos + spriteheight + jumpVelocity),GetColumn()))
            {
-             if(GetRow(ypos + jumpVelocity) * map.GetSquareHeight() - ypos > 2)
-             {
-             }else{   }
-             ypos =  GetRow(ypos + jumpVelocity) * map.GetSquareHeight() - 1;
+
+             ypos =  GetRow(ypos + spriteheight + jumpVelocity) * map.GetSquareHeight() - spriteheight;
 
              jumpVelocity = -1;
            }
@@ -134,7 +127,7 @@ function NextState(map)
              // {ypos += 5; }
              // else{ ypos += 3;}
              ypos += jumpVelocity;
-             jumpVelocity--;
+             jumpVelocity -= Gravity();
              if(jumpVelocity == 0){jumpVelocity = -1;}
            }
 
@@ -143,72 +136,54 @@ function NextState(map)
          {
            //do player logic from a zero start state for easier visible math
 
-           // if( map.CheckIfSpaceOpen(GetRow(ypos - 4),GetColumn()) == true)
-           // {jumpVelocity -= gravity;}
-           //
-           // if(jumpVelocity < -1)
-           // {ypos -= 5; }
-           // else if(jumpVelocity < -1){ ypos -= 3;}
-           if(2 <= map.GetSquareValue(GetRow(ypos + jumpVelocity),GetColumn()))
+          //if passing to another square, land on platforms, but if already in a platform square, pass through it
+           if(GetRow(ypos) != GetRow(ypos + jumpVelocity))
            {
-             if(GetRow(ypos) * map.GetSquareHeight() - ypos > 2)
-             {
 
-             }else{   }
-             ypos =  GetRow(ypos) * map.GetSquareHeight();
+                 if(2 <= map.GetSquareValue(GetRow(ypos + jumpVelocity),GetColumn()))
+                 {
 
-             jumpVelocity = 0;
+                   ypos =  GetRow(ypos) * map.GetSquareHeight();
+
+                   jumpVelocity = 0;
+                 }
+                 else
+                 {
+                   ypos += jumpVelocity;
+                   //never skip over a square
+                   if(jumpVelocity > - map.GetSquareHeight() + 1)
+                   {jumpVelocity -= Gravity();}
+
+                 }
+
            }
+
            else
            {
-             // if(jumpVelocity > 1)
-             // {ypos += 5; }
-             // else{ ypos += 3;}
+
              ypos += jumpVelocity;
-             jumpVelocity--;
+             //never skip over a square
+             if(jumpVelocity > - map.GetSquareHeight() + 1)
+             {
+               jumpVelocity -= Gravity();
+
+             }
+
            }
 
-           // if(map.GetSquareValue(GetRow(ypos),GetColumn()) != map.GetSquareValue(GetRow(ypos - gravity),GetColumn()))
-           // {
-           //
-           //   if(1 < map.GetSquareValue(GetRow(ypos - gravity),GetColumn()))
-           //   {
-           //
-           //     if(jumpVelocity < -1)
-           //     {ypos -= 5; }
-           //     else if(jumpVelocity < -1){ ypos -= 3;}
-           //     else{}
-           //   }
-           //
-           // }
-           // else
-           // {
-           //   if(2 < map.GetSquareValue(GetRow(ypos - gravity),GetColumn()))
-           //   {
-           //     if(jumpVelocity < -1)
-           //     {ypos -= 5; }
-           //     else if(jumpVelocity < -1){ ypos -= 3;}
-           //     else{}
-           //   }
-           //
-           // }
 
-
-
-
-
-
-           // if(ypos < 0){ypos = 0;}
-           console.log(GetRow(),GetColumn());
-           // console.log(GetColumn());
 
          }else
          {
-           if(2 > map.GetSquareValue(GetRow(ypos - 1),GetColumn()))
-           {
 
-             jumpVelocity = -5;
-           }else{canjump = totalJumps;}
+               if(2 > map.GetSquareValue(GetRow(ypos - 1),GetColumn()))
+               {
+
+                 jumpVelocity = -2;
+                 //falling takes a jump
+                 canjump --;
+                 gravity = 0;
+               }else{canjump = totalJumps;}
 
          }
 
@@ -216,85 +191,17 @@ function NextState(map)
  }
 
 
- function Gravity(map)
+ function Gravity()
  {
 
-   // gravity++;
-   // if(gravity >= gravitycycle)
-   // {
-   //   gravity = 0;
-   //   if(jumpVelocity > 0)
-   //   {
-   //     jumpVelocity -= gravitystrength;
-   //
-   //   }
-   //   else
-   //   {
-   //     if(map.GetSquareValue(GetRow(ypos - 5),GetColumn()) < 2)
-   //     {
-   //       jumpVelocity -= gravitystrength;
-   //
-   //     }else{canjump = totalJumps;}
-   //
-   //   }
-   //
-   //
-   // }
+   gravity++;
+   if(gravity >= gravitycycle)
+   {
+     gravity = 0;
+     return 1;
+   }
+   else{return 0;}
 
-   // if(jumpVelocity > 0)
-   // {
-   //       //hitting a ceiling that you cant jump through
-   //       if(GetRow(ypos) != GetRow(ypos - jumpVelocity))
-   //       {
-   //           if(2 < map.GetSquareValue(GetRow(ypos + jumpVelocity),GetColumn()))
-   //           {
-   //             jumpVelocity = 0;
-   //           }
-   //
-   //       }
-   //       else{jumpVelocity --;}
-   //
-   //
-   //
-   //
-   // }
-   // else if (jumpVelocity < 0)
-   // {
-   //
-   //    if(GetRow(ypos) != GetRow(ypos - jumpVelocity))
-   //    {
-   //      if(3 == map.GetSquareValue(GetRow(ypos + jumpVelocity),GetColumn()) || 1 == map.GetSquareValue(GetRow(ypos),GetColumn()))
-   //      {
-   //        jumpVelocity = (GetRow(ypos + jumpVelocity) * map.GetSquareHeight()) - ypos;
-   //      }
-   //    }
-   //
-   // }
-   //
-   // //check if the player is crossing two rows, and if so check if there is a floor
-   // if(GetRow(ypos) != GetRow(ypos - gravity))
-   // {
-   //   if(map.GetSquareValue(GetRow(ypos - gravity),GetColumn()) > 1)
-   //   {
-   //     //get the distance left to the floor
-   //     jumpVelocity = ypos - (GetRow(ypos) * map.GetSquareHeight() ) + 1;
-   //   }
-   //   else
-   //   {
-   //
-   //     jumpVelocity -= gravity;
-   //   }
-   // }
-   // else
-   // {
-   //
-   //   if(map.CheckIfSpaceOpen(GetRow(ypos ),GetColumn()) == true)
-   //   {jumpVelocity -= gravity;}
-   //   else{jumpVelocity = 0;}
-   //
-   // }
-   //
-   // if(jumpVelocity == 0){canjump = totalJumps;}
 
  }
 
@@ -308,6 +215,7 @@ function Jump()
 {
   if(canjump > 0)
   {
+      gravity = 0;
       canjump -= 1;
       jumpVelocity = jumpHeight;
 
@@ -347,21 +255,7 @@ return Math.floor(newpos / squarewidth);
 }
 
 
-console.log(NextSprite());
 
  export default {
-NextSprite,ChangeDirection,Jump,NextState,SetMoveDirection,SetRightSpeed,SetLeftSpeed
+NextSprite,Jump,NextState,SetMoveDirection,SetRightSpeed,SetLeftSpeed
 };
-
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-// import stand1 from './sprites/scoutspritesheet/stand1.png';
-// import walk1 from './sprites/scoutspritesheet/walk1.png';
-// import walk2 from './sprites/scoutspritesheet/walk2.png';
-// import walk3 from './sprites/scoutspritesheet/walk3.png';
-// // import player from "./player.js";
-// import playerSprite from './sprites/scoutspritesheet/stand1.png';
-// var xpos = 0
-// var runAnimation = [stand1,walk1,walk2,walk3];
-// var currentAnimation = 0;
