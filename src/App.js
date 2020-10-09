@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import playerSprite from './sprites/scoutspritesheet/stand1.png';
 import player from "./player.js";
+import SpriteSheet from "./SpriteSheet.js";
 import Map from  "./map.js";
 let map = new Map();
 
@@ -92,7 +93,7 @@ class Player extends React.Component {
 class MapRender extends React.Component {
 
   intervalID;
-  state = {currentmap:[]}
+  state = {currentmap:[],bullets:[]}
 
   componentDidMount() {
     this.moveMap();
@@ -106,13 +107,15 @@ class MapRender extends React.Component {
 
   moveMap = () => {
     let newmap  = map.GetMap(this.state.currentmap);
+    let newbullets  = map.UpdateProjectiles();
       this.setState(
         {
-          currentmap:newmap
+          currentmap:newmap,
+          bullets:newbullets
 
          }
       );
-        this.intervalID = setTimeout(this.moveMap.bind(this), 100);
+        this.intervalID = setTimeout(this.moveMap.bind(this), 10);
   }
   render() {
     // var currentmap = this.state.currentmap;
@@ -138,10 +141,24 @@ class MapRender extends React.Component {
               height:"50px"
 
             };
+            //dont need to render the black spaces
+            if(this.state.currentmap[j][i] != 0)
+            {rows.push(<img  style={divStyle} src={map.SpriteSwitch(this.state.currentmap[j][i])} /> );}
 
-        rows.push(<img  style={divStyle} src={map.SpriteSwitch(this.state.currentmap[j][i])} /> )
       }
 
+    }
+    for (var j = 0; j < this.state.bullets.length; j+=1)
+    {
+      divStyle = {
+        position: 'absolute',
+        left:(20 + this.state.bullets[j][0] ).toString() + "px",
+        top:(550 - this.state.bullets[j][2] ).toString() + "px",
+        width:"5px",
+        height:"5px"
+
+      };
+rows.push(<img  style={divStyle} src={SpriteSheet.GetBulletSprite(this.state.bullets[j][5])} /> );
     }
     return (
       <div>
@@ -149,10 +166,8 @@ class MapRender extends React.Component {
       </div>
     );
   }
-
-
-
 }
+
 
 class Controls extends React.Component {
 
@@ -188,6 +203,7 @@ class Controls extends React.Component {
       if(event.which == 32){player.Jump();}
       if(event.which == 97){player.SetLeftSpeed(1);}
       if(event.which == 100){player.SetRightSpeed(1);}
+      if(event.which == 119){player.Shoot();} //w
 
   }
   handleKeyUp = (event) => {

@@ -13,17 +13,9 @@ import stand1flip from './sprites/scoutspritesheet/stand1flip.png';
 import walk1flip from './sprites/scoutspritesheet/walk1flip.png';
 import walk2flip from './sprites/scoutspritesheet/walk2flip.png';
 import walk3flip from './sprites/scoutspritesheet/walk3flip.png';
- var currentmap0 = [bluefloor,bluefloor,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluesquare];
-var currentmap1 = [bluefloor,bluesquare,bluesquare];
-var currentmap2 = [bluefloor,bluefloor,bluefloor];
-var currentmap3 = [bluesquare,bluefloor,bluesquare];
-var currentmap4 = [bluewallfloor,bluewallfloor,bluewall1,bluewall1];
-var currentmap5 = [bluefloor,bluefloor,bluefloor,bluewallfloor,bluefloor];
 
-var level0walls = [bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor]
-var level1walls = [bluefloor,blacksquare,bluefloor,blacksquare,blacksquare,bluefloor,bluefloor,bluesquare,bluefloor]
-var level0floors = [bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor,bluefloor,bluesquare,bluefloor]
-var level1floors = [bluefloor,blacksquare,bluefloor,blacksquare,blacksquare,bluefloor,bluefloor,bluesquare,bluefloor]
+var bullets = [[59,3,51,0,111,1],[105,1,55,0,111,1],[225,1,151,0,115,1]] // x,xvel,y,yvel,lifetime,sprite ?
+
 
 var maparray = [[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,0,0,0,0,0,0,2,2,2,0,0,2,0,0,0,0,2,0,0],
@@ -34,7 +26,7 @@ var maparray = [[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,0,0,0,2,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,0,0,0,2,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
-                [0,0,3,0,0,0,0,3,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,2,0,0,0,0,3,0,0,0,0,2,0,0,0,0,2,0,0],
                 [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]]
 
 export default class Map
@@ -45,7 +37,50 @@ export default class Map
       this.currentmap0 = maparray;
       this.squarewidth = 50;
       this.squareheight = 50;
+      this.bullets = bullets;
+
     }
+
+    UpdateProjectiles = function()
+    {
+      var count = this.bullets.length;
+      var newlist = [];
+      var projectilearray = this.bullets;
+      var el;
+      while(count > 0)
+      {
+        count--;
+        el = this.bullets.pop();
+
+         // el = [projectilearray[count][0] + projectilearray[count][1],projectilearray[count][1], projectilearray[count][2] + projectilearray[count][3] , projectilearray[count][3],projectilearray[count][4] - 1,projectilearray[count][5]]
+        // projectilearray[count ] = [el[0] + 1, el[1],el[2],el[3], projectilearray[count][4] - 1,el[5]]
+        // projectilearray[count ] = el;
+  el = [el[0] + el[1],el[1], el[2] + el[3] , el[3],el[4] - 1,el[5]];
+  console.log(  Math.floor(el[2] / this.GetSquareHeight()));
+  console.log(Math.floor(el[0] / this.GetSquareWidth()));
+  let row = Math.floor(el[2] / this.GetSquareHeight());
+  let col = Math.floor(el[0] / this.GetSquareWidth());
+        if(el[4] > 0 && this.GetSquareValue(row,col) < 3  )
+        {
+            // el = [el[0] + el[1],el[1], el[2] + el[3] , el[3],el[4] - 1,el[5]]
+        }
+        // else{el = [-10,1,-10,0,0,0];}
+
+        if(el[4] > -1)
+        {
+          // console.log(  el);
+          newlist.push(el);
+
+        }
+
+      }
+      //set the updated list of projectiles
+        this.bullets = newlist;
+        return newlist;
+    }
+
+      GetProjectiles = function()
+      {return this.bullets;}
 
       MoveMap = function()
     {
@@ -93,6 +128,12 @@ export default class Map
    //   else{return true;}
    // }
 
+   AddProjectile = function(newprojectile)
+   {
+     this.bullets.push(newprojectile);
+       console.log(this.bullets.length);
+   }
+
    CheckIfSpaceOpen = function(row,col)
   {
     if(row > this.currentmap0.length || col >= this.currentmap0[this.currentmap0.length - row].length ||
@@ -104,12 +145,17 @@ export default class Map
 
   GetSquareValue = function(row,col)
   {
-   if(row > this.currentmap0.length || col >= this.currentmap0[this.currentmap0.length - row].length ||
+    if(this.currentmap0 == null)
+    {  this.currentmap0 = maparray;}
+
+   if(row >= this.currentmap0.length || col >= this.currentmap0[0].length ||
      row < 0 || col < 0)
    {return 3;}
-   if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return 3;}
+
+   else if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return 3;}
    else{return this.currentmap0[this.currentmap0.length - row][col];}
   }
+
 
    SpriteSwitch = function(mapsquarevalue)
    {
@@ -124,10 +170,11 @@ export default class Map
      return blacksquare;
    }
 
-   GetSquareHeight = function(oldmap)
+
+   GetSquareHeight = function()
   {return this.squareheight;}
 
-  GetSquareWidth = function(oldmap)
+  GetSquareWidth = function()
  {return this.squarewidth;}
 
 }
