@@ -72,7 +72,7 @@ class Player extends React.Component {
       color: 'blue',
       position: 'absolute',
       left: (this.state.xpos).toString() + "px",
-      top:  (485 - this.state.ypos ).toString() + "px",
+      top:  (435 - this.state.ypos ).toString() + "px",
       width:"3%",
       height:"5%"
     };
@@ -152,7 +152,7 @@ class MapRender extends React.Component {
       divStyle = {
         position: 'absolute',
         left:( this.state.bullets[j][0] ).toString() + "px",
-        top:(485 - this.state.bullets[j][2] ).toString() + "px",
+        top:(435 - this.state.bullets[j][2] ).toString() + "px",
         width:"5px",
         height:"5px"
 

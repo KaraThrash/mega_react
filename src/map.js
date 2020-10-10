@@ -21,7 +21,7 @@ var bullets = [[59,3,41,0,1111,1],[105,1,61,0,1111,1],[225,1,101,0,1115,1],[225,
 ] // x,xvel,y,yvel,lifetime,sprite ?
 
 
-var maparray = [[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+var maparray = [
                 [0,0,0,0,0,0,0,2,2,2,0,0,2,0,0,0,0,2,0,0],
                 [0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
@@ -63,7 +63,7 @@ export default class Map
 
   let row = Math.floor(el[2] / this.GetSquareHeight());
   let col = Math.floor(el[0] / this.GetSquareWidth());
-        if(el[4] > 0 && this.GetSquareValue(row,col) < 3  )
+        if(el[4] > 0 && this.GetSquareValue(row + 1,col) < 3  )
         {
           newlist.push(el);
             // el = [el[0] + el[1],el[1], el[2] + el[3] , el[3],el[4] - 1,el[5]]

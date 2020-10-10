@@ -6,8 +6,8 @@ import stand1flip from "./sprites/scoutspritesheet/stand1flip.png";
 import walk1flip from "./sprites/scoutspritesheet/walk1flip.png";
 import walk2flip from "./sprites/scoutspritesheet/walk2flip.png";
 import walk3flip from "./sprites/scoutspritesheet/walk3flip.png";
-import jump1 from "./sprites/scoutspritesheet/jump.png";
-import jump1flip from "./sprites/scoutspritesheet/jumpflip.png";
+import jump1 from "./sprites/scoutspritesheet/jump1.png";
+import jump1flip from "./sprites/scoutspritesheet/jump1flip.png";
 
 import bullet from "./sprites/bullet.png";
 import bullet1 from "./sprites/bullet1.png";
