@@ -19,7 +19,8 @@ var currentAnimation = 0,
 
 var leftspeed = 0,
   rightspeed = 0,
-  direction = 0;
+  direction = 0,
+  facing = 0;
 var walkspeed = 2,
   jumpspeed = 4;
 var jumpHeight = 5;
@@ -38,8 +39,7 @@ var gravity = 0,
   gravitystrength = 4,
   gravitycycle = 6;
 
-var spriteheight = 20;
-var spritewidth = 10;
+var spritewidth = 20,spriteheight = 40;
 
 function NextState(map) {
   VerticalMovement(map);
@@ -48,7 +48,7 @@ function NextState(map) {
 
   var newsprite = SpriteSheet.NextSprite(jumpVelocity, direction);
 
-  return [newsprite, xpos, ypos];
+  return [newsprite, xpos - (spritewidth ), ypos - (spriteheight * 0.5)];
 }
 
 function NextSprite() {
@@ -181,7 +181,13 @@ function Jump() {
 function Shoot(map) {
   if (canshoot > 0) {
     canshoot -= 1;
-    // map.AddProjectile([xpos + spritewidth,direction,ypos + (spriteheight / 2),0,10,100]);
+    var bulletdirection = direction;
+    if(bulletdirection == 0)
+    {
+      bulletdirection = facing;
+
+    }
+    map.AddProjectile([xpos +  ( bulletdirection == -1 ? -30 : 10),bulletdirection * 1,ypos - (50 ) ,0,100,1]);
   }
 }
 
@@ -195,6 +201,8 @@ function SetRightSpeed(newlrightspeed) {
 }
 
 function SetMoveDirection(newdir) {
+  if(-leftspeed + rightspeed == 0)
+  {facing = direction;}
   direction = -leftspeed + rightspeed;
 }
 

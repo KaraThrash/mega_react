@@ -49,14 +49,14 @@ class Player extends React.Component {
      playerState =  player.NextState(map);
      if(playerState[2] > 10 || map.CheckIfSpaceOpen(1,1) == true )
      {
-       map.MoveMap();
+       //map.MoveMap();
 
      }
         this.setState(
           {
             direction: newdir,
-            xpos: playerState[1] - spritewidth,
-            ypos: playerState[2] - spriteheight,
+            xpos: playerState[1] ,
+            ypos: playerState[2] ,
             sprite: playerState[0]
            }
         );
@@ -67,8 +67,7 @@ class Player extends React.Component {
   render() {
 
 
-    var orange = "position:absolute"
-    xpos = xpos + 10;
+    // xpos = xpos + 10;
     const divStyle = {
       color: 'blue',
       position: 'absolute',
@@ -152,8 +151,8 @@ class MapRender extends React.Component {
     {
       divStyle = {
         position: 'absolute',
-        left:(20 + this.state.bullets[j][0] ).toString() + "px",
-        top:(550 - this.state.bullets[j][2] ).toString() + "px",
+        left:( this.state.bullets[j][0] ).toString() + "px",
+        top:(485 - this.state.bullets[j][2] ).toString() + "px",
         width:"5px",
         height:"5px"
 
@@ -203,7 +202,7 @@ class Controls extends React.Component {
       if(event.which == 32){player.Jump();}
       if(event.which == 97){player.SetLeftSpeed(1);}
       if(event.which == 100){player.SetRightSpeed(1);}
-      if(event.which == 119){player.Shoot();} //w
+      if(event.which == 119){player.Shoot(map);} //w
 
   }
   handleKeyUp = (event) => {

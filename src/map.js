@@ -14,7 +14,11 @@ import walk1flip from './sprites/scoutspritesheet/walk1flip.png';
 import walk2flip from './sprites/scoutspritesheet/walk2flip.png';
 import walk3flip from './sprites/scoutspritesheet/walk3flip.png';
 
-var bullets = [[59,3,51,0,111,1],[105,1,55,0,111,1],[225,1,151,0,115,1]] // x,xvel,y,yvel,lifetime,sprite ?
+var bullets = [[59,3,41,0,1111,1],[105,1,61,0,1111,1],[225,1,101,0,1115,1],[225,1,121,0,1115,1],[225,1,141,0,1115,1],
+[59,3,281,0,1111,1],[105,1,241,0,1111,1],[225,1,201,0,1115,1],[225,1,181,0,1115,1],[225,1,161,0,1115,1],
+[59,3,381,0,1111,1],[105,1,341,0,1111,1],[225,1,301,0,1115,1],[225,1,481,0,1115,1],[225,1,461,0,1115,1],
+
+] // x,xvel,y,yvel,lifetime,sprite ?
 
 
 var maparray = [[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
@@ -24,8 +28,8 @@ var maparray = [[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,3,3,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,0,0,0,0,0,2,2,2,0,0,0,2,0,0,0,0,2,0,0],
                 [0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
-                [0,0,0,0,2,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
-                [0,0,0,0,2,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,0,0,2,2,0,3,0,0,0,0,2,0,0,0,0,2,0,0],
+                [0,0,0,0,3,2,0,0,0,0,0,0,2,0,0,0,0,2,0,0],
                 [0,0,2,0,0,0,0,3,0,0,0,0,2,0,0,0,0,2,0,0],
                 [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]]
 
@@ -56,20 +60,25 @@ export default class Map
         // projectilearray[count ] = [el[0] + 1, el[1],el[2],el[3], projectilearray[count][4] - 1,el[5]]
         // projectilearray[count ] = el;
   el = [el[0] + el[1],el[1], el[2] + el[3] , el[3],el[4] - 1,el[5]];
-  console.log(  Math.floor(el[2] / this.GetSquareHeight()));
-  console.log(Math.floor(el[0] / this.GetSquareWidth()));
+
   let row = Math.floor(el[2] / this.GetSquareHeight());
   let col = Math.floor(el[0] / this.GetSquareWidth());
         if(el[4] > 0 && this.GetSquareValue(row,col) < 3  )
         {
+          newlist.push(el);
             // el = [el[0] + el[1],el[1], el[2] + el[3] , el[3],el[4] - 1,el[5]]
+        }else
+        {
+          console.log(  Math.floor(el[2] / this.GetSquareHeight()));
+          console.log(Math.floor(el[0] / this.GetSquareWidth()));
+
         }
         // else{el = [-10,1,-10,0,0,0];}
 
         if(el[4] > -1)
         {
           // console.log(  el);
-          newlist.push(el);
+          // newlist.push(el);
 
         }
 
@@ -136,10 +145,10 @@ export default class Map
 
    CheckIfSpaceOpen = function(row,col)
   {
-    if(row > this.currentmap0.length || col >= this.currentmap0[this.currentmap0.length - row].length ||
+    if(row > this.currentmap0.length || col >= this.currentmap0[this.currentmap0.length - row - 1].length ||
       row < 0 || col < 0)
     {return false;}
-    if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return false;}
+    if(this.currentmap0[this.currentmap0.length - row - 1][col]  > 2){return false;}
     else{return true;}
   }
 
@@ -148,12 +157,12 @@ export default class Map
     if(this.currentmap0 == null)
     {  this.currentmap0 = maparray;}
 
-   if(row >= this.currentmap0.length || col >= this.currentmap0[0].length ||
-     row < 0 || col < 0)
+   if(row >= this.currentmap0.length || this.currentmap0[this.currentmap0.length - row ] == null || col >= this.currentmap0[this.currentmap0.length - row - 1].length ||
+     this.currentmap0[this.currentmap0.length - row ][col] == null || row < 0 || col < 0)
    {return 3;}
 
-   else if(this.currentmap0[this.currentmap0.length - row][col]  > 2){return 3;}
-   else{return this.currentmap0[this.currentmap0.length - row][col];}
+   else if(this.currentmap0[this.currentmap0.length - row - 1][col]  > 2){return 3;}
+   else{return this.currentmap0[this.currentmap0.length - row - 1][col];}
   }
 
 
