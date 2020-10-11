@@ -1,6 +1,4 @@
-
 import SpriteSheet from "./SpriteSheet.js";
-
 
 var currentAnimation = 0,
   animationBuffer = 7,
@@ -28,7 +26,8 @@ var gravity = 0,
   gravitystrength = 4,
   gravitycycle = 6;
 
-var spritewidth = 10,spriteheight = 40;
+var spritewidth = 10,
+  spriteheight = 40;
 
 function NextState(map) {
   VerticalMovement(map);
@@ -37,7 +36,7 @@ function NextState(map) {
 
   var newsprite = SpriteSheet.NextSprite(jumpVelocity, direction);
 
-  return [newsprite, xpos - (spritewidth * 2), ypos - (spriteheight * 0.5)];
+  return [newsprite, xpos - spritewidth * 2, ypos - spriteheight * 0.5];
 }
 
 // function NextSprite() {
@@ -170,13 +169,19 @@ function Jump() {
 function Shoot(map) {
   if (canshoot > 0) {
     canshoot -= 1;
-    var bulletdirection = direction;
-    if(bulletdirection == 0)
-    {
-      bulletdirection = facing;
-
+    var bulletdirection = walkspeed * direction;
+    if (bulletdirection == 0) {
+      bulletdirection = walkspeed * facing;
     }
-    map.AddProjectile([xpos +  ( bulletdirection == -1 ? -30 : 10),bulletdirection * 1,ypos - (50 ) ,0,100,1]);
+    SpriteSheet.PlayerShoots();
+    map.AddProjectile([
+      xpos + bulletdirection * 10,
+      bulletdirection,
+      ypos - 50,
+      0,
+      100,
+      1,
+    ]);
   }
 }
 
@@ -190,8 +195,9 @@ function SetRightSpeed(newlrightspeed) {
 }
 
 function SetMoveDirection(newdir) {
-  if(-leftspeed + rightspeed == 0)
-  {facing = direction;}
+  if (-leftspeed + rightspeed == 0) {
+    facing = direction;
+  }
   direction = -leftspeed + rightspeed;
 }
 
@@ -210,11 +216,10 @@ function GetColumn(newpos) {
 }
 
 export default {
-
   Jump,
   NextState,
   SetMoveDirection,
   SetRightSpeed,
   SetLeftSpeed,
-  Shoot
+  Shoot,
 };
