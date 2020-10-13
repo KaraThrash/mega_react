@@ -25,6 +25,19 @@ import bullet from "./sprites/bullet3.png";
 import bullet1 from "./sprites/bullet1.png";
 import blacksquare from "./sprites/scoutspritesheet/blackcube.png";
 
+import bluesquare from "./sprites/scoutspritesheet/bluesquare.png";
+import graysquare from "./sprites/scoutspritesheet/blackcube.png";
+import brownsquare from "./sprites/scoutspritesheet/brownbox.png";
+import redxsquare from "./sprites/scoutspritesheet/redxsquare.png";
+import bluewall from "./sprites/scoutspritesheet/bluewall0.png";
+import bluewall1 from "./sprites/scoutspritesheet/bluewall1.png";
+import bluefloor from "./sprites/scoutspritesheet/bluefloor.png";
+import blueceiling from "./sprites/scoutspritesheet/blueceiling.png";
+import bluewallfloor from "./sprites/scoutspritesheet/bluewallfloor.png";
+import bluewallfloor1 from "./sprites/scoutspritesheet/bluewallfloor1.png";
+import alienpurple from "./sprites/AlienPurple0.png";
+import alienpurple1 from "./sprites/AlienPurple1.png";
+
 var runAnimationflip = [walk2flip, walk3flip, walk2flip, walk1flip];
 var runAnimation = [walk2, walk3, walk2, walk1];
 var rungunAnimationflip = [
@@ -126,7 +139,52 @@ function GetBulletSprite(spritevalue) {
   if (spritevalue === 3) {
     return bullet;
   }
+  if (spritevalue === 6) {
+    return alienpurple;
+  }
+  if (spritevalue === 7) {
+    return alienpurple1;
+  }
   return bullet;
+}
+
+function GetMapSprite(mapsquarevalue) {
+  if (mapsquarevalue === 0) {
+    return blacksquare;
+  }
+  if (mapsquarevalue === 1) {
+    return bluefloor;
+  }
+  if (mapsquarevalue === 2) {
+    return blueceiling;
+  }
+  if (mapsquarevalue === 3) {
+    return bluesquare;
+  }
+  if (mapsquarevalue === 4) {
+    return brownsquare;
+  }
+  if (mapsquarevalue === 5) {
+    return redxsquare;
+  }
+  if (mapsquarevalue === 6) {
+    return alienpurple;
+  }
+  return blacksquare;
+}
+
+function GetEnemySprite(enemyvalue) {
+  if (enemyvalue === 0) {
+    return alienpurple1;
+  }
+
+  if (enemyvalue === 6) {
+    return alienpurple1;
+  }
+  if (enemyvalue === 7) {
+    return alienpurple;
+  }
+  return alienpurple;
 }
 
 export default {
@@ -134,4 +192,6 @@ export default {
   ChangeDirection,
   GetBulletSprite,
   PlayerShoots,
+  GetMapSprite,
+  GetEnemySprite,
 };

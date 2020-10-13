@@ -14,7 +14,6 @@ var timeBuffer = 1; //for controlling game speed
 let xpos = 0;
 let ypos = 0;
 var playerState = {
-  direction: 1,
   xpos: 0,
   ypos: 0,
   sprite: "./sprites/scoutspritesheet/stand1.png",
@@ -123,7 +122,7 @@ class MapRender extends React.Component {
           rows.push(
             <img
               style={divStyle}
-              src={map.SpriteSwitch(this.state.currentmap[j][i])}
+              src={SpriteSheet.GetMapSprite(this.state.currentmap[j][i])}
             />
           );
         }
@@ -171,6 +170,50 @@ class BulletRender extends React.Component {
         <img
           style={divStyle}
           src={SpriteSheet.GetBulletSprite(this.state.bullets[j][5])}
+        />
+      );
+    }
+    return <div>{rows}</div>;
+  }
+}
+
+class EnemyRender extends React.Component {
+  intervalID;
+  state = { enemies: [] };
+
+  componentDidMount() {
+    this.UpdateEnemies();
+  }
+  componentWillUnmount() {
+    clearTimeout(this.intervalID);
+  }
+
+  UpdateEnemies = () => {
+    let newenemies = map.UpdateEnemies(playerState);
+    this.setState({
+      enemies: newenemies,
+    });
+    this.intervalID = setTimeout(this.UpdateEnemies.bind(this), 10);
+  };
+  render() {
+    // var currentmap = this.state.currentmap;
+
+    var rows = [];
+
+    let divStyle = {};
+
+    for (var j = 0; j < this.state.enemies.length; j += 1) {
+      divStyle = {
+        position: "absolute",
+        left: this.state.enemies[j][0].toString() + "px",
+        top: (435 - this.state.enemies[j][2]).toString() + "px",
+        width: "15px",
+        height: "15px",
+      };
+      rows.push(
+        <img
+          style={divStyle}
+          src={SpriteSheet.GetEnemySprite(this.state.enemies[j][5])}
         />
       );
     }
@@ -262,6 +305,7 @@ class Controls extends React.Component {
     return (
       <div>
         <input
+          autofocus
           style={divStyle}
           type="text"
           id="one"
@@ -269,13 +313,9 @@ class Controls extends React.Component {
           onKeyPress={this.handleKeyPress}
           onKeyUp={this.handleKeyUp}
         />
-        <button style={leftbutton} onKeyPress={this.moveright}>
-          {" "}
-          LEFT
-        </button>
+
         <button style={rightbutton} onKeyPress={this.moveright}>
-          {" "}
-          RIGHT
+          Click to Enable Keyboard
         </button>
       </div>
     );
@@ -339,6 +379,7 @@ function App() {
           <Controls />
           <MapRender />
           <BulletRender />
+          <EnemyRender />
           <Player />
         </div>
       </header>
